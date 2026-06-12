@@ -1,0 +1,2 @@
+game: game.cpp classes.cpp classes.hpp entity.hpp player.hpp background.hpp levels.hpp officerPaths.hpp levels1_3.hpp principle.hpp
+	g++ game.cpp classes.cpp -o game $(shell sdl2-config --cflags --libs) -lSDL2_image
