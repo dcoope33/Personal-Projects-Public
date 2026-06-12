@@ -1,2 +1,2 @@
 # Personal-Projects-Public
-This is the public repo version of my personal projects.
+This is a public repo with some of my personal projects.
