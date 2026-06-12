@@ -81,3 +81,8 @@ ENTITIES:
 5.  The last entity I made is the Principle. This is the boss that you fight at the end of the final level of the game.
     This entity cycles through different attacks and an idle/walking state. The attack choice is based off of certain details
     such as distance from the player. 
+
+ADDITIONAL NOTES:
+
+   This game depents on the SDL2 library and its image extention. In order for the game to work you must have SDL2 installed. 
+sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev if on Ubuntu.
