@@ -1,3 +1,7 @@
+DISCLAIMER:
+
+   This game IS NOT FINISHED YET and I am in the process of working on level 4.
+
 OVERVIEW:   
    
     Shool Game (Escape The Classroom) is a game that I have had a lot of fun developing. The basic idea of this game 
