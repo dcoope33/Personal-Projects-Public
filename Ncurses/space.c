@@ -1,8 +1,10 @@
 #include "mygame.h"
 
+// some fun little global variables
 llist *enemies;
 unlocked ship_options;
 
+// more globals 
 unsigned int score = 0;
 unsigned int ECOLS = 0;
 unsigned int Highscore;
@@ -20,9 +22,12 @@ void Init_Game() {
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
     curs_set(0);
+
+    // open highscore file and get current highscore (first 4 bytes)
     FILE *HS = fopen("Highscore", "rb");
     fread(&Highscore, 4, 1, HS);
     fclose(HS);
+
     attron(A_BOLD | A_REVERSE);
     char s[20];
     char *start = " PRESS ENTER TO START "; 
@@ -54,6 +59,9 @@ void Init_Game() {
 
 void End_Game() {
     clear();
+
+    // Highscore and ship unlock updates highscore is first 4 bytes of file and 
+    // ship unlocks are the next 8 bytes
     attron(A_BOLD | A_REVERSE);
     if(score < Highscore) {
         char *msg = "  GAME OVER  ";
@@ -119,47 +127,78 @@ void End_Game() {
 }
 
 int update_and_draw(ship *s, int tick) {
+    // initialize number of destroyed ships to 0;
     int destroyed = 0;
     Node_t *rover = enemies->Head;
-    FORI(enemies->size) {
-        int *curr = (int*)rover->data;
-        destroyed = 0;
-        FORJ(ECOLS) {
+    
+    // loop through the linked list
+    FORI(enemies->size) { 
+        int *curr = (int*)rover->data; 
+        destroyed = 0; // reset destroyed cause it is counted per row
+        
+        // loop through each int array of the linked list
+        FORJ(ECOLS) { 
+
+            // some random number stuff so the pattern isn't always the same
             if(!i && !(tick % speed) && RAND(0, 4) == 0) curr[j] = DESTROYED;
+            
+            // if there are bullets in play deal with them
             if(s->bull.size > 0) {
                 Node_t *rover2 = s->bull.Head;
+
+                // loop through bullet linked list 
                 FORK(s->bull.size) {
+
                     bullet *curr_b = (bullet*)rover2->data;
                     
+                    // check for collision if the ship is not already destroyed
                     if(curr[j] != DESTROYED && curr_b->y == i*2 && curr_b->x == j*SPACING) { 
-                        curr[j] = DESTROYED;
-                        REMOVE(&s->bull, k);
-                        score++;
+                        curr[j] = DESTROYED; // mark ship dead
+                        REMOVE(&s->bull, k); // remove bullet
+                        
+                        // inc score and breifely print a 1 where ship was
+                        score++; 
                         mvprintw(i*2, j*SPACING, " 1 ");
-                        break;
+
+                        break; 
+
                     } else if(s->y+1 == i*2 && s->x == i*SPACING) return 1;
 
+
+                    // draw on the last time through since we don't need to draw the
+                    // bullets on every loop through the enemies
                     if(i == enemies->size-1 && j == ECOLS-SPACING) {
+                        
+                        // draw the darn bullet
                         mvprintw(curr_b->y, curr_b->x, "%s", Bull_Drawing);
+                        
                         // Move bullet every few ticks so it's not too fast
                         if (tick % 75 == 0) curr_b->y--; 
+                        
+                        // if bullet is off screen remove
                         if (curr_b->y < 0) { REMOVE(&s->bull, k); break; }
                     }
                     rover2 = rover2->next;
                 }
             }
             
+            // draw the ships if they are alive else increment the number of destroyed
             if(curr[j] != DESTROYED) mvprintw(i*2, j*SPACING, "'|'");
             else destroyed++;
         }
+
+        // if all ships in a row are destroyed and its the bottom row remove it. 
+        // we only remove at the bottom to prevent "sliding back".
         if(destroyed == ECOLS && i == enemies->size-1) { REMOVE(enemies, i); break; }
         rover = rover->next;
     }
+
     // Draw Ship 
     mvprintw(s->y, s->x, "%s", drawing);
     char msg[20];
     sprintf(msg, "Score: %d", score);
     mvprintw(0, COLS-strlen(msg), "%s", msg);
+    
     refresh();
     return 0;
 }

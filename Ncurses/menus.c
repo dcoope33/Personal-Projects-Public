@@ -1,5 +1,9 @@
 #include "mygame.h"
 
+
+// These are just some menues nothing too important is going on here
+
+
 void Tutorial() {
     erase();
     mvprintw(0, 0, "USE THE ARROW KEYS TO MOVE LEFT AND RIGHT");

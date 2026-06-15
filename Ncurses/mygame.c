@@ -1,11 +1,13 @@
 #include "mygame.h"
 
+// finds whatever index you are looking for if it exists (will seg fault if index is not in list)
 void *ACCESS(llist *List, int index) { 
     Node_t *rover = List->Head; 
     FORZ(index) { rover = rover->next; } 
     return (rover->data); 
 }
 
+// adds directely to the front of the list O(1)
 void ADD_FRONT(llist *L) { 
     Node_t *Node = calloc(1,sizeof(Node_t)); 
     Node->next = NULL; 
@@ -21,6 +23,7 @@ void ADD_FRONT(llist *L) {
     L->size++; 
 }
 
+// adds directely to the end of list O(1)
 void APPEND_BULL(llist *L, int x, int y) { 
     if(L->size > 8) return;
     Node_t *Node = calloc(1,sizeof(Node_t)); 
@@ -40,6 +43,7 @@ void APPEND_BULL(llist *L, int x, int y) {
     L->size++; 
 }
 
+// removes specified index O(n)
  void REMOVE(llist *L, int index) { 
     if(L->Head IS NULL) return;
     Node_t *rover = L->Head; 
@@ -50,14 +54,14 @@ void APPEND_BULL(llist *L, int x, int y) {
         rover = rover->next; 
     } 
     if(prev IS NULL) { 
-        // Scenario: Removing the Head
+        // Removing the Head
         L->Head = rover->next; 
         // If the list is now empty, Tail must be NULL too
         if (L->Head IS NULL) L->Tail = NULL; 
     } else { 
-        // Scenario: Removing Middle or Tail
+        // Removing Middle or Tail
         prev->next = rover->next; 
-        // If we just removed the Tail, update L->Tail to the previous node
+        // If just removed the Tail, update L->Tail to the previous node
         if (rover IS L->Tail) L->Tail = prev; 
     } 
     if(rover IS_NOT NULL) { 
@@ -67,6 +71,7 @@ void APPEND_BULL(llist *L, int x, int y) {
     } 
 }
 
+// initializes list and adds specified num of items to it
 llist *LLIST(int num) { 
     llist *LIST = LIST_INIT(); 
     FORZ(num) { 
@@ -75,6 +80,7 @@ llist *LLIST(int num) {
     return LIST; 
 }
 
+// destroys the list
 void DESTRUCT(llist *L) { 
     Node_t *rover = L->Head;
     Node_t *next_node;

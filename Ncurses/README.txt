@@ -65,8 +65,9 @@ GAME DESIGN:
 
     There is one save file called Highscore. The first 4 bytes of the file store the highscore (an int). The next 8 bytes 
     store a struct (two ints) that correspondes to wether or not the two unlockable ships are unlocked. since the struct is 
-    just two ints and not like 3 chars or something there should theoretically not be any issues with padding as the struct 
-    should be consistantly 8 bytes. 
+    just two ints and not like 3 chars or something (with 3 chars the struct size would likely be 4 bytes instead of 3 and could
+    cause some padding issues when trying to read in raw bytes from a file). There should theoretically not be any issues with padding 
+    as the struct should be consistantly 8 bytes with this configuration. 
 
 
     MENUS: 
@@ -81,4 +82,4 @@ ADDITIONAL NOTES:
     if on Ubuntu.
 
 2.  If the Highscore file doesn't exist the game will seg fault upon launch so please make sure that if you take the code 
-    from this repo and try to run it that you also take the Highscore file aswell. 
+    from this repo and try to run it that you also take the Highscore file aswell.
