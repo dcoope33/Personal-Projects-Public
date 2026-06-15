@@ -1,0 +1,499 @@
+* {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+   /* min-height: 100vh; */
+    background: #0f0c29;
+/*    overflow: hidden; */
+}
+
+/* For sign in page */
+
+/* Floating background blobs */
+.background-shapes .shape {
+    position: absolute;
+    filter: blur(50px);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.shape:nth-child(1) {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(#ff00cc, #3333ff);
+    top: -50px;
+    left: -50px;
+}
+
+.shape:nth-child(2) {
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(#00d2ff, #3a7bd5);
+    bottom: -50px;
+    right: -50px;
+}
+
+.container {
+    position: relative;
+    top: 15vh;
+    width: auto;
+    height: auto;
+    min-width: 22rem;
+    max-width: 25rem;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(15px);
+    border: .0625rem solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1.5625rem 2.8125rem rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.HeadText {
+    position: relative;
+    top: 15vh;
+    width: 95%;
+    text-align: center;
+}
+
+.HeadText h1 {
+    font-weight: 1800;
+    font-size: 4.375rem;
+    padding-left: 1.25rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 1.875rem;
+    letter-spacing: .0625rem; 
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.9rem;
+    letter-spacing: .0625rem;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 1.875rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: .625rem 0;
+    background: transparent;
+    border: none;
+    border-bottom: .125rem solid #fff;
+    outline: none;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.input-group label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: .625rem 0;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -1.25rem;
+    font-size: .75rem;
+    color: #00d2ff;
+}
+
+.btn {
+    width: 100%;
+    padding: .75rem;
+    background: #fff;
+    border: none;
+    border-radius: 2.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: 0.3s;
+    color: black;
+}
+
+.btn:hover {
+    background: #00d2ff;
+    color: #fff;
+}
+
+p {
+    text-align: center;
+    margin-top: 1.25rem;
+    font-size: .875rem;
+}
+
+p a {
+    color: #00d2ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
+}
+
+/* For Home Page */
+
+.Name h1 {
+    position: relative;
+    top: 2vh;
+    font-weight: 1800;
+    font-size: 2.8rem;
+    text-align: center;
+    padding-bottom: .5rem;
+    color: white;
+}
+
+.menucontainer {
+    position: relative;
+    top: 4vh;
+    width: 100%;       
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(.8rem);         
+    border-top: .0625rem solid rgba(255, 255, 255, 0.2);
+    border-bottom: .0625rem solid rgba(255, 255, 255, 0.2);
+    padding: .95rem 0;  
+    display: flex;      
+    justify-content: center; 
+    gap: 2rem;     
+}     
+
+.menu {
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .0625rem;
+    transition: 0.3s;
+}
+
+.menu:hover {
+    color: #00d2ff; /* Glow effect when hovering */
+    text-shadow: 0 0 .625rem #00d2ff;
+}
+
+.Image {
+    display: grid;
+    /* Create 3 columns, each taking 1 "fraction" of the space */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 1.25rem;             /* Space between the cards */
+    padding: 1.25rem;
+    max-width: 72%;     /* Keeps the grid from getting too wide on monitors */
+    margin: 5vh auto 0 auto;        /* Centers the whole grid on the screen */
+}
+
+@media (max-width: 64rem) {
+  .Image {
+    /* Changes to 3 columns, automatically 2 rows if 6 items */
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+@media (max-width: 30rem) {
+  .Image {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workout-card {
+    position: relative;
+    border-radius: .75rem;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;   /* Forces all cards to be the same size, like a fixed-size struct */
+}
+
+.imagebtn {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: .75rem;
+    overflow: hidden;
+    border-color: black;
+
+}
+
+.feature-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* Crops the image to fill the box without stretching it */
+    transition: transform 0.5s, filter 0.3s;
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 2;
+}
+
+/* HOVER EFFECTS */
+
+.workout-card:hover .feature-image {
+    filter: blur(.25rem) brightness(60%);
+    transform: scale(1.1); /* Subtle zoom effect */
+}
+
+.workout-card:hover {
+    box-shadow: 0 0 1rem #00d2ff;
+}
+
+.workout-card:hover .overlay-text {
+    opacity: 1;
+}
+
+/* for about page */
+
+.abouttext {
+    position: relative;
+    top: 10vh;
+    height: 60vh;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    text-align: justify;
+    color: white;
+}
+
+.abouttext h2 {
+    font-size: 1.5rem;
+}
+
+/* for plans page */
+
+.Pcontainer {
+    display: grid;
+    /* Create 3 columns, each taking 1 "fraction" of the space */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 1.25rem;             /* Space between the cards */
+    padding: auto;
+    max-width: 70%;     /* Keeps the grid from getting too wide on monitors */
+    margin: 5vh auto 10vh auto;        /* Centers the whole grid on the screen */
+}
+
+@media (max-width: 90rem) {
+  .Pcontainer {
+    /* Changes to 3 columns, automatically 2 rows if 6 items */
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+@media (max-width: 55rem) {
+  .Pcontainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.Options {
+    position: relative;
+    top: 5vh;
+    width: auto;
+    height: auto;
+    max-width: 25rem;
+    min-height: 32rem;
+    max-height: 36rem;
+    padding: 2.5rem; 
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(15px);
+    border: .0625rem solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1.5625rem 2.8125rem rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.Options .btn {
+    position: absolute;
+    width: 85%;
+    bottom: 4vh;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.Options h2 {
+    position: relative;
+    margin-bottom: 4vh;
+}
+
+.Options h3 {
+    position: relative;
+    top: 1vh;
+    margin-bottom: 4vh;
+}
+
+/* for any plan page */
+
+.plancontainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    top: 6vh;
+    width: 90vw;
+    height: 90vh;
+    padding: 2.5rem;
+}
+
+.plancontainer .btn {
+    position: absolute;
+    width: auto;
+    min-width: 20rem;
+    max-width: 50rem;
+    bottom: 10rem;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.plancontainer h2 {
+    position: relative;
+    top: 15vh;
+    font-size: 2.5rem;
+    color: white;
+}
+
+/* For myplans */
+
+.MPcontainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1.25rem;             
+    padding: auto;
+    max-width: 50%;
+    min-width: 45%;   
+    margin: 5vh auto 10vh auto;        
+}
+
+@media (max-width: 55rem) {
+  .MPcontainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.Options h3 {
+    text-align: center;
+}
+
+/* this is the code for the tier system */
+
+.free {
+    position: absolute;
+    left: 2rem;
+}
+
+.tier1 {
+    position: absolute;
+    left: 2rem;
+}
+
+.tier2 {
+    position: absolute;
+    left: 2rem;
+}
+
+.free h2 {
+    color: silver; 
+    background: transparent;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .0625rem;
+}
+
+.tier1 h2 {
+    color: #ffffff; 
+    text-shadow: 0 0 1rem #ffffff;
+    background: transparent;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .0625rem;
+}
+
+.tier2 h2 {
+    color: gold; 
+    text-shadow: 0 0 1rem gold;
+    background: transparent;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .0625rem;
+}
+
+/* code for the plan1/plan2 pages */
+
+.myplancontainer {
+    position: relative;
+    top: 6vh;
+    width: 90vw;
+    height: 90vh;
+    padding: 2.5rem;
+}
+
+.quiz {
+    position: absolute;
+    right: 0vw;
+    min-height: 25vh;
+    width: 25vw;
+    text-align: center;
+    padding: 1.5rem; 
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(15px);
+    border: .0625rem solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1.5625rem 2.8125rem rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.quiz .btn {
+    position: absolute;
+    bottom: 2vh;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 80%
+}
+
+.myplancontainer h2 {
+    font-size: 2.5rem;
+    position: absolute;
+    top: 4vh;
+    right: 10wh;
+    color: white;
+}
+
+.ordered {
+    position: absolute;
+    top: 15vh;
+    left: 6vw;
+}
+
+.list {
+    position: relative;
+    color: white;
+    margin-bottom: 2vh;
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mike and Dan Lifting</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="Name">
+        <h1>Strength Plans</h1>
+    </div>
+
+    <div class="menucontainer">
+        <a href="home.html">
+            <button class="menu">Home</button>
+        </a>
+        <a href="plans.html">
+            <button class="menu">Plans</button>
+        </a>
+        <a hidden href="signin.html">
+            <button class="menu">Sign In</button>
+        </a>
+        <a hidden href="myplans.html">
+            <button class="menu">My Plans</button>
+        </a>
+        <a hidden href="/logout">
+            <button class="menu">Sign Out</button>
+        </a>
+        <div hidden id="free" class="free">
+            <h2>Free</h2>
+        </div>
+        <div hidden id="tier1" class="tier1">
+            <h2>Tier 1</h2>
+        </div>
+        <div hidden id="tier2" class="tier2">
+            <h2>Tier 2</h2>
+        </div>
+    </div>
+
+    <div hidden class="identify"><h2>strength</h2></div>
+
+    <div class="plancontainer">
+        <a hidden id="options" href="tiers.html">
+            <button class="btn">View Options</button>
+        </a>
+        <form hidden id="view" action="/view" method="POST">
+            <input type="hidden" name="source" value="strength">
+            <button type="submit" class="btn">View Your Plan</button>
+        </form>
+        <form hidden id="add1" action="/add1" method="POST">
+            <input type="hidden" name="source" value="strength">
+            <button type="submit" class="btn">Add Plan</button>
+        </form>
+        <form hidden id="add2" action="/add2" method="POST">
+            <input type="hidden" name="source" value="strength">
+            <button type="submit" class="btn">Add Plan</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

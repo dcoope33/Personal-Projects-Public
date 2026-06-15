@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mike and Dan Lifting</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="Name">
+        <h1>My Plans</h1>
+    </div>
+
+    <div class="menucontainer">
+        <a href="home.html">
+            <button class="menu">Home</button>
+        </a>
+        <a href="plans.html">
+            <button class="menu">Plans</button>
+        </a>
+        <a hidden></a>
+        <a hidden href="/logout">
+            <button class="menu">Sign Out</button>
+        </a>
+        <div hidden id="free" class="free">
+            <h2>Free</h2>
+        </div>
+        <div hidden id="tier1" class="tier1">
+            <h2>Tier 1</h2>
+        </div>
+        <div hidden id="tier2" class="tier2">
+            <h2>Tier 2</h2>
+        </div>
+    </div>
+
+    <div class="MPcontainer">
+        <div hidden id="no_plan1" class="Options">
+            <h2>Plan 1</h2>
+            <h3>You Don't Have A Plan Selected</h3>
+            <a href="plans.html">
+                <button class="btn">Choose A Plan</button>
+            </a>
+        </div>
+        <div hidden id="plan1" class="Options">
+            <h2>Plan 1</h2>
+            <h3 id="p1text"></h3>
+            <a href="myplan1.html">
+                <button class="btn">View Your Plan</button>
+            </a>
+        </div>
+
+        <div hidden id="no_plan2" class="Options">
+            <h2>Plan 2</h2>
+            <h3>You Don't Have A Plan Selected</h3>
+            <a href="plans.html">
+                <button class="btn">Choose A Plan</button>
+            </a>
+        </div>
+        <div hidden id="plan2" class="Options">
+            <h2>Plan 2</h2>
+            <h3 id="p2text"></h3>
+            <a href="myplan2.html">
+                <button class="btn">Veiw Your Plan</button>
+            </a>
+        </div>
+        <div hidden id="upgrade" class="Options">
+            <h2>Plan 2 Requires Tier 2 Status</h2>
+            <a href="tiers.html">
+                <button class="btn">Upgrade Plan</button>
+            </a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
