@@ -42,6 +42,7 @@ public:
         } else currentDir = ++currentDir % 4;
     }
 
+    
     void move_y(int dir) { 
         float step = 2.0f * dir;
         int x_l = x + w/4;
@@ -67,12 +68,18 @@ public:
         frameSpeed = 800;
         currentRow = JUMPATTACK; 
     }
+
+
     void swoopAttack() {
         currentRow = SWOOPATTACK;
     }
+
+
     void stabAttack() {
         currentRow = SWOOPATTACK;
     }
+
+
     void grabAttack(std::pair<int, int> coords) {
         if(currentFrame == 2 && !jumpSet) { 
             x = coords.first - 40; 
@@ -98,6 +105,7 @@ public:
     }
 
     int pickAttack(int dist_x, int dist_y) {
+        
         if(dist_x > 300 || dist_y > 300) return JUMP;
         
         if(dist_x <= 100 && dist_y <= 100) return rand() % 3 + 1;
@@ -163,12 +171,15 @@ public:
         int p_x = coords.first;
         int p_y = coords.second;
 
+        // player heights set and adjusted if necissary
         int p_w = 64;
         int p_h = crouched ? 44 : 64;
 
+        // hitbox correction
         int x_left = x + 30;
         int x_right = x + w - 30;
 
+        // don't check collision when he's in the air on jump attack
         if((attackType == 0 || attackType == 3) && currentFrame == 2) return 0;
 
         // Check if there is NO overlap. If any of these are true, they are NOT colliding.

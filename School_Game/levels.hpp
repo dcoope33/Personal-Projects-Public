@@ -52,10 +52,14 @@ public:
         delete player;
     }
 
+    // these need to be implementeddddddd
     virtual void init() = 0;
     virtual int updateRoom(Player *player) = 0;
 
+    // this doesn't need to be level specific because of how I have it setup but if I added a bunch more stuff
+    // it would need to become level specific. 
     int updateRoom_static(int update_room) {
+        
         static int timer = 0;
         Uint32 currentTime = SDL_GetTicks();
 
@@ -81,18 +85,23 @@ public:
     } 
 
 
-    // these second two are generic and stay the same;
+    // these last two functions are generic and stay the same;
     int update() {
+
         bool E_Pressed = game->handleEvents(*gameObjects);
         int new_room = -1;
+
         if(E_Pressed) new_room = updateRoom(player);
         new_room = updateRoom_static(new_room);
         
+        // update room entities and such if a new room is entered
         if(new_room != -1 && new_room != Outside) {
                 room = new_room;
                 active_map = Maps[new_room];
                 player->setMap(Maps[new_room]);
                 gameObjects = Rooms[new_room];
+                
+                // Important to reset entities
                 for(Entity *e : *gameObjects) {
                     e->resetState();
                 }
@@ -100,20 +109,27 @@ public:
         } else if(new_room == Outside)
                 return game->handleGameWin(LevelCompleteTex, levelID);
 
+        // clear the screen 
         game->clear();
 
+        // loop through current room entities
         for(Entity *e : *gameObjects) {
+
+            // each entity does its specified action and updates
             e->action(player->getCoords());
             e->update();
             
+            // if look returns true then the player was caught
             if(e->look(active_map, player->getCoords(), player->iscrouched())) 
                 if(game->handleGameLoss(LevelFailedTex, levelID)) return levelID;
 
-            
+
             int damage = 0;
+            // check collision against player but skip the player and background
             if(e != player && e != (*gameObjects)[0]) damage = e->collCheck(player->getCoords(), player->iscrouched());
             player->takeDamage(damage);
 
+            // render every entity
             e->render(game->getRenderer());
         }
 
@@ -129,8 +145,12 @@ public:
     }
 
     int run() {
+
+        // initialize the level
         init();
+
         int next = END;
+
         while(game->isRunning() && isLevelRunning) {
             next = update();
             if(next != -1) isLevelRunning = false;

@@ -1,6 +1,8 @@
 #include "levels1_3.hpp"
 
 int main(int argc, char* args[]) {
+
+    // Initialize gamewindow object and textures
     GameWindow game("Escape the Classroom", 800, 600);
     SDL_Texture *LevelCompleteTex = TextureManager::LoadTexture("Screens/LevelComplete.png", game.getRenderer());
     SDL_Texture *LevelFailedTex = TextureManager::LoadTexture("Screens/LevelFailed.png", game.getRenderer());
@@ -8,6 +10,7 @@ int main(int argc, char* args[]) {
     SDL_Texture *StartTex = TextureManager::LoadTexture("Screens/StartingScreen.png", game.getRenderer());
     SDL_Texture *LevelSelectTex = TextureManager::LoadTexture("Screens/LevelSelect4.png", game.getRenderer());
 
+    // level number is gonna be chosen in the handlestart menu
     int level = game.handleStart(StartTex, LevelSelectTex);
 
     Level *CurrentLevel = nullptr;
@@ -15,6 +18,7 @@ int main(int argc, char* args[]) {
         switch (level) {
             case TUTORIAL:
                 CurrentLevel = new Tutorial(&game, LevelCompleteTex, LevelFailedTex);
+                // currentLevel->run returns the next level to be run
                 level = CurrentLevel->run();
                 delete CurrentLevel;
                 break;

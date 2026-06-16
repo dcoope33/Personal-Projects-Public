@@ -47,8 +47,10 @@ public:
 
     void move_y(int dir) { 
         float step = speed * dir;
-        int x_l = x + w/4;
+        // I want some leeway in the hitbox so calculate that
+        int x_l = x + w/4; 
         int x_r = x + (3 * w/4);        
+
         int y_next = y + h-12 + step;
 
         //printf("%d %d\n", (int)x, (int)y);
@@ -59,10 +61,11 @@ public:
 
     void crouch() { 
         if(!crouched) {
-            y = y + 20; 
+            y = y + 20; // move down a bit so your head is lower
             crouched = true;
             currentRow = CROUCHING;
-            h = 44;
+            // decrease height so that your feet stay in the same place after moving down
+            h = 44; 
             w = 44;
         } 
     }
@@ -82,6 +85,7 @@ public:
     void attack() {} 
 
     void takeDamage(int amount) { 
+        // invincibility frames with timer
         Uint32 currentTime = SDL_GetTicks();
         if(currentTime > invincibleTimer + invisLength && amount) {
             Health -= amount;
@@ -91,13 +95,22 @@ public:
 
     bool displayHealth(GameWindow *game, int level, int room) {
         enum Rooms {LEVEL_4 = 4, BossRoom = 2};
-        static int first = 0;
+        static bool first = true; 
+
         if(Health == 0) return true;
+
         for(int i = 0; i < Health; i += 20) {
+
+            // display each heart
             SDL_Rect srcRect = {0, 0, 225, 225};
             SDL_Rect destRect = {i+i/4, 0, 20, 20};
             SDL_RenderCopy(game->getRenderer(), Heart, &srcRect, &destRect);
-            if(!first) { usleep(800000); game->display(); }
+            
+            // on first time this func is called make a slow health loading in effect
+            if(first) { 
+                usleep(800000); game->display(); 
+                first = false;
+            }
 
         }
         first++;

@@ -100,7 +100,7 @@ public:
 
 class Teacher : public Entity {
 private:
-    int initial_x, initial_y;
+    int initial_x, initial_y; // important for reseting 
     int walk_time = 4000;
     int idle_time = 3000;   
     bool done_walking = false;
@@ -110,8 +110,8 @@ private:
 public:
     Teacher(SDL_Texture *tex, float x, float y, int w, int h) 
         : Entity(tex, x, y, w, h) {
-        initial_x = x;
-        initial_y = y;
+        initial_x = x; 
+        initial_y = y; 
         srcRect.w = 96;
         srcRect.h = 217;
         currentRow = WALK_LEFT; // Start left
@@ -160,7 +160,7 @@ public:
 
             case WALK_LEFT:
                 x -= 1.0f;
-                // Walk left for 6 seconds
+                // Walk left for alloted time
                 if(currentTime > stateTimer + walk_time) {
                     realRow =  done_walking ? WALK_LEFT : WALK_UP;
                     prev_walking_dir = WALK_LEFT;
@@ -171,7 +171,6 @@ public:
 
             case WALK_RIGHT:
                 x += 1.0f;
-                // Walk right for 6 seconds
                 if(currentTime > stateTimer + walk_time) {
                     realRow =  done_walking ? WALK_DOWN : WALK_UP;
                     prev_walking_dir = WALK_RIGHT;
@@ -199,31 +198,6 @@ public:
                 break;
         }
     }
-
-
-    /*bool look(CollisionMap *active_map, std::pair<int, int> coords) override { 
-        int p_x = coords.first;
-        int p_y = coords.second;
-        int x_dist = abs(p_x - x);
-        int y_dist = abs(p_y - x);
-        switch(realRow) {
-            case WALK_LEFT:
-                if((p_y < y + h - 20) && (p_y + h > y + 20) && (p_x <= x)) 
-                break;
-            case WALK_RIGHT:
-                if((p_y < y + h - 20) && (p_y + h > y + 20) && (p_x >= x)) currentRow = CHASING_X;
-                break;
-            case WALK_DOWN:
-                if((p_x < x + w - 20) && (p_x + w > x + 20) && (p_y >= y)) currentRow = CHASING_Y;
-                break;
-            case WALK_UP:
-                if((p_x < x + w - 20) && (p_x + w > x + 20) && (p_y <= y)) currentRow = CHASING_Y;
-                break;
-        }
-
-        return 0;
-    }*/
-
 
     void resetState() override { 
         prev_walking_dir = WALK_RIGHT;
@@ -261,19 +235,24 @@ public:
     void action(std::pair<int, int> coords) override { 
         Uint32 currentTime = SDL_GetTicks();
 
+        // speeds for running esentially
+        // static is good because speeds are samme for all guards so you only need one copy
         static const float dir_x[4] = {0.0f, 5.0f, 0.0f, -5.0f};
         static const float dir_y[4] = {2.0f, 0.0f, -2.0f, 0.0f};
 
         if(currentRow == CHASING_X || currentRow == CHASING_Y) {
-            frameCount = 1;
+            // chaseeeee
+            frameSpeed = 100;
             x += dir_x[realRow];
             y += dir_y[realRow];
 
         } else {
-            if (currentRow == WALK_LEFT) x -= 1.0f;
-            else if (currentRow == WALK_RIGHT) x += 1.0f;
-            else if (currentRow == WALK_UP) y -= .8f; 
-            else if (currentRow == WALK_DOWN) y += .8f; 
+
+            // actually move 
+            if(currentRow == WALK_LEFT) x -= 1.0f;
+            else if(currentRow == WALK_RIGHT) x += 1.0f;
+            else if(currentRow == WALK_UP) y -= .8f; 
+            else if(currentRow == WALK_DOWN) y += .8f; 
 
             if(currentTime > stateTimer + time) {
                     if(currentNum*3 >= path.size()) currentNum = 0;

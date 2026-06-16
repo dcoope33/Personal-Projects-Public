@@ -5,9 +5,10 @@ enum MoveDir {UP = -1, DOWN = 1, LEFT = -1, RIGHT = 1};
 // Handles all SDL events
 bool GameWindow::handleEvents(std::vector<Entity*>& entities) {
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    while(SDL_PollEvent(&event)) {
         if(event.type == SDL_QUIT) running = false; // close window
         else if(event.type == SDL_MOUSEBUTTONDOWN) {
+            // this next line is for testing purposes and is likely commented out
             //printf("%d\t%d\n", event.button.x, event.button.y);
         } 
     }
@@ -19,9 +20,7 @@ bool GameWindow::handleEvents(std::vector<Entity*>& entities) {
     bool isMoving = false;
     bool new_room = false;
 
-
-
-     // Sneaking check (you can't move while sneaking)
+    // Sneaking check (you can't move while sneaking)
     if(currentKeyStates[SDL_SCANCODE_LSHIFT]) {
         player->crouch();
 
@@ -55,6 +54,7 @@ bool GameWindow::handleEvents(std::vector<Entity*>& entities) {
             isMoving = true;
         }
         if(currentKeyStates[SDL_SCANCODE_E]) {
+            // timeout so that you don't go through a door and immediately go back
             Uint32 currentTime = SDL_GetTicks();
             if(currentTime > timer + 400) {
                 new_room = true;
@@ -65,6 +65,7 @@ bool GameWindow::handleEvents(std::vector<Entity*>& entities) {
         }
     }
 
+    // I mean self explanitory
     if(!isMoving) {
         player->setState(IDLE);
     }

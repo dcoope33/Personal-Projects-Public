@@ -27,6 +27,7 @@ public:
         }
         IMG_Init(IMG_INIT_PNG);
 
+        // setup stuff
         window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, 0);
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -162,26 +163,26 @@ public:
 };
 
 
-// TextureManager
+// TextureManager (oh really?)
 class TextureManager {
 public:
     static SDL_Texture *LoadTexture(const char *fileName, SDL_Renderer *ren) {
         SDL_Surface *tempSurface = IMG_Load(fileName);
-        if (tempSurface == NULL) {
+        if(tempSurface == NULL) {
             printf("Failed to load image: %s\n", IMG_GetError());
         }
         
         SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, tempSurface);
         SDL_FreeSurface(tempSurface); // free() surface
 
-        if (tex == NULL) {
+        if(tex == NULL) {
             printf("SDL_Error: %s\n", SDL_GetError());
         }
 
         return tex;
     }
 
-    // A helper to draw textures without needing a full Entity instance
+    // helper to draw textures without needing a full Entity instance
     static void Draw(SDL_Renderer *ren, SDL_Texture *tex, SDL_Rect src, SDL_Rect dest) {
         SDL_RenderCopy(ren, tex, &src, &dest);
     }
@@ -227,7 +228,7 @@ public:
                 Uint32 pixel = pixels[y * width + x];
                 Uint8 r, g, b, a;
                 
-                // This will now unpack perfectly every single time
+                // unpack
                 SDL_GetRGBA(pixel, optimizedSurface->format, &r, &g, &b, &a);
 
                 // If it is pure black, mark it as solid (true)
@@ -240,13 +241,12 @@ public:
         SDL_FreeSurface(optimizedSurface); // Clean up the temporary optimized surface
     }
 
-    // CallEVERY FRAME
     bool isSolid(int x, int y) {
         // Safety bounds check so game doesn't crash if someone walks off-screen
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return true; 
         }
-        // Ultra-fast O(1) boolean lookup
+        // O(1) boolean lookup
         return walkPixels[y * width + x];
     }
 };
