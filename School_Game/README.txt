@@ -2,6 +2,10 @@ DISCLAIMER:
 
    This game IS NOT FINISHED YET and I am in the process of working on level 4.
 
+   Most of the assets "art" in this game were made with the help of generative AI this is because 
+   I am an engineer not an artist.
+
+
 OVERVIEW:   
    
     Shool Game (Escape The Classroom) is a game that I have had a lot of fun developing. The basic idea of this game 
@@ -57,6 +61,12 @@ of OOP. Here are some of the things I did to acheive this goal.
     vector of bools and has a method that tells if a pixel is solid or not.
 
 
+5.  In order to make the backgrounds work (not being able to walk through walls and objects) I use a boolian vector that tracks
+    wether every pixel is "solid" or walkable. I have a function that takes in a black and white image and turns it into a boolian
+    vector that I can then use. This works nicely because it is simple and all I have to do is create a black and white version of 
+    my background images. This easy to do and is easily edited and scalable.
+
+
     All of these things combnined allows me to easily scale by adding new 
 levels or entities as needed without having to modify the game loop and rendering/animations. 
 
@@ -81,6 +91,7 @@ ENTITIES:
 5.  The last entity I made is the Principle. This is the boss that you fight at the end of the final level of the game.
     This entity cycles through different attacks and an idle/walking state. The attack choice is based off of certain details
     such as distance from the player. 
+
 
 ADDITIONAL NOTES:
 
