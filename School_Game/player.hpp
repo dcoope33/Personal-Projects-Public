@@ -6,7 +6,7 @@ class Player : public Entity {
 private:
     int initial_x, initial_y;
     int Health = 100;
-    int invisLength = 2000;
+    int invisLength = 1500;
 
     int Hitbox_buff_left = 40;
     int Hitbox_buff_right = 60;
@@ -184,7 +184,8 @@ public:
             
             // on first time this func is called make a slow health loading in effect
             if(first) { 
-                usleep(800000); game->display(); 
+                usleep(800000); 
+                game->display(); 
                 first = false;
             }
 

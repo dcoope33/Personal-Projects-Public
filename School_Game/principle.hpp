@@ -16,7 +16,7 @@ private:
     int Hitbox_buff_left = 40;
     int Hitbox_buff_right = 60;
 
-    int Health = 200;
+    int Health = 400;
 
     bool started = false;
     bool jumpSet = false;
@@ -97,7 +97,7 @@ public:
 
     void stabAttack() {
         currentRow = SWOOPATTACK_L;
-        Hitbox_buff_right = 0;
+        Hitbox_buff_left = 0;
     }
 
 
@@ -271,7 +271,6 @@ public:
         Health -= 20;
         hit = true;
         texture = Damaged;
-        //printf("%d\n", Health);
         
         // dead
         if(Health == 0) return true;
