@@ -1,27 +1,41 @@
 #include "officerPaths.hpp"
 
-enum MoveDir {UP, DOWN, LEFT, RIGHT};
+enum MoveDir {UP, DOWN, LEFT, RIGHT, STILL};
 enum Attacks {JUMP, SWOOP, STAB, GRAB, NONE};
 enum Moves {Moving, Attacking};
 
 class Principle : public Entity {
 private:
     int time = 1000;   
+
     int currentDir = LEFT;
     int prev_walking_dir = WALK_RIGHT;
     int currentState = Moving;
-    int attackType = rand() % 4;
+    int attackType = NONE;
+
+    int Hitbox_buff_left = 40;
+    int Hitbox_buff_right = 60;
+
+    int Health = 200;
+
     bool started = false;
     bool jumpSet = false;
+    bool hit = false;
+
+    SDL_Texture *Normal;
+    SDL_Texture *Damaged;
+
     Uint32 stateTimer = 0; // Tracks state duration
     CollisionMap *map = nullptr;
 
 public:
-    Principle(SDL_Texture *tex, float x, float y, int w, int h) 
+    Principle(SDL_Texture *tex, SDL_Texture *DM, float x, float y, int w, int h) 
         : Entity(tex, x, y, w, h) {
         srcRect.w = 267;
         srcRect.h = 352;
         currentRow = WALK_UP; 
+        Normal = tex;
+        Damaged = DM;
         stateTimer = SDL_GetTicks();
     }
 
@@ -29,7 +43,7 @@ public:
 
 
     void move_x(int dir) { 
-        float step = 2.0f * dir; 
+        float step = 1.0f * dir; 
         int x_nextl = x + w/4 + step;
         int x_nextr = x + (3 * w/4) + step;
         int y_bottom = y + h-12;
@@ -44,7 +58,7 @@ public:
 
     
     void move_y(int dir) { 
-        float step = 2.0f * dir;
+        float step = 1.0f * dir;
         int x_l = x + w/4;
         int x_r = x + (3 * w/4);        
         int y_next = y + h-12 + step;
@@ -65,18 +79,25 @@ public:
             jumpSet = true;
         } 
 
+        if(currentFrame == 3) {
+            Hitbox_buff_left = 0;
+            Hitbox_buff_right = 0;
+        }
+
         frameSpeed = 800;
         currentRow = JUMPATTACK; 
     }
 
 
     void swoopAttack() {
-        currentRow = SWOOPATTACK;
+        currentRow = SWOOPATTACK_R;
+        Hitbox_buff_right = 0;
     }
 
 
     void stabAttack() {
-        currentRow = SWOOPATTACK;
+        currentRow = SWOOPATTACK_L;
+        Hitbox_buff_right = 0;
     }
 
 
@@ -91,18 +112,39 @@ public:
     }
 
 
-    int pickDirection(int dist_x, int dist_y) {
+    int pickDirection(int dist_x, int dist_y, bool standStill) {
+        
         enum axis {X, Y};
         bool axis = (abs(dist_x) >= abs(dist_y)) ? X : Y;
 
-        if(axis && dist_y > 0) return DOWN;
-        else if(axis) return UP;
+        if(standStill) {
+            if(axis && dist_y > 0) currentRow = DOWN;
+            else if(axis) currentRow = UP;
 
-        if(!axis && dist_x > 0) return RIGHT;
-        else if(!axis) return LEFT; 
+            if(!axis && dist_x > 0) currentRow = RIGHT;
+            else if(!axis) currentRow = LEFT; 
 
-        return rand() % 4;
+            time = 1000 + rand() % 500;
+            frameCount = 1;
+
+            return STILL;
+
+        } else {
+
+            frameCount = 4;
+
+            if(axis && dist_y > 0) return DOWN;
+            else if(axis) return UP;
+
+            if(!axis && dist_x > 0) return RIGHT;
+            else if(!axis) return LEFT; 
+
+            return rand() % 4;
+
+        }
+
     }
+
 
     int pickAttack(int dist_x, int dist_y) {
         
@@ -122,24 +164,24 @@ public:
 
         switch(currentState) {
             case Moving:
-                currentDir = pickDirection(dist_x, dist_y);
+
+                if(currentDir != STILL) currentDir = pickDirection(dist_x, dist_y, 0);
 
                 switch(currentDir) {
                     case UP: move_y(-1); break;
                     case DOWN: move_y(1); break;
                     case LEFT: move_x(-1); break;
                     case RIGHT: move_x(1); break;
+                    default: frameCount = 1;
                 }
 
                 // after time is up boss attacks
                 if(currentTime > stateTimer + time) {
                     currentState = Attacking;
 
-                    currentDir = pickDirection(dist_x, dist_y);
                     attackType = pickAttack(abs(dist_x), abs(dist_y));
                     
-                    currentFrame = 0;
-                    frameTimer = currentTime;
+                    Start_Animation();
                 }
             break;
 
@@ -157,8 +199,11 @@ public:
                     started = false;
                     jumpSet = false;
                     
-                    time = rand() % 500 + 300; // random num from 300-700
-                    attackType = pickAttack(dist_x, dist_y);
+                    Hitbox_buff_left = 40;
+                    Hitbox_buff_right = 60;
+
+                    currentDir = pickDirection(dist_x, dist_y, rand() % 2);
+                    time = rand() % 500 + 500; // random num from 
                     
                     currentState = Moving;
                     stateTimer = currentTime;
@@ -171,13 +216,16 @@ public:
         int p_x = coords.first;
         int p_y = coords.second;
 
+        p_x += 15;
+        p_y += crouched ? 44-20 : 64-20;
+
         // player heights set and adjusted if necissary
-        int p_w = 64;
-        int p_h = crouched ? 44 : 64;
+        int p_w = 64 - 30;
+        int p_h = 10;
 
         // hitbox correction
-        int x_left = x + 30;
-        int x_right = x + w - 30;
+        int x_left = x + Hitbox_buff_left;
+        int x_right = x + w - Hitbox_buff_right;
 
         // don't check collision when he's in the air on jump attack
         if((attackType == 0 || attackType == 3) && currentFrame == 2) return 0;
@@ -192,6 +240,44 @@ public:
         }
 
         return 20;
+    }
+
+    bool takeDamage(bool reset, std::pair<int, int> coords, int AttackDir) override {
+        // player is not attacking
+        if(reset) {
+            hit = false;
+            texture = Normal;
+            return false;
+        }
+
+        // adjust player hitbox depending on attack direction
+        switch(AttackDir) {
+            case ATTACK_DOWN: coords.second += 30; break;
+            case ATTACK_LEFT: coords.first -= 30; break;
+            case ATTACK_UP: coords.second -= 30; break;
+            case ATTACK_RIGHT: coords.first += 30; break;
+        }
+
+        // if this attack has already registered or the player is not contacting
+        // the principle then just return false
+        if(hit) return false;
+        
+        else if(!collCheck(coords, false)) {
+            texture = Normal;
+            return false;
+        }
+
+        // take damage
+        Health -= 20;
+        hit = true;
+        texture = Damaged;
+        //printf("%d\n", Health);
+        
+        // dead
+        if(Health == 0) return true;
+
+        // not dead
+        return false;
     }
 
 };

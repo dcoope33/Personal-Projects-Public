@@ -6,20 +6,63 @@ class Player : public Entity {
 private:
     int initial_x, initial_y;
     int Health = 100;
-    float speed = 2.0f;
-    CollisionMap *map = nullptr;
-    SDL_Texture *Heart;
-    Uint32 invincibleTimer = 0; // Tracks invincibility frames
     int invisLength = 2000;
+
+    int Hitbox_buff_left = 40;
+    int Hitbox_buff_right = 60;
+
+    Uint32 invincibleTimer = 0; // Tracks invincibility frames
+    CollisionMap *map = nullptr;
+    
+    SDL_Texture *Heart;
+    SDL_Texture *Normal;
+    SDL_Texture *Damaged;
+
+    float speed = 2.0f;
+    
     bool crouched = false;
+    bool alive = true;
+    bool attacking = false;
+    bool started = false;
 
 public:
-    Player(SDL_Texture *tex, SDL_Texture *heart, float x, float y, int w, int h) 
+    Player(SDL_Texture *tex, SDL_Texture *heart, SDL_Texture *BW, float x, float y, int w, int h) 
         : Entity(tex, x, y, w, h) {
         initial_x = x;
         initial_y = y;
         Heart = heart;
+        srcRect.w = 40;
+        srcRect.h = 48;
+        Normal = texture;
+        Damaged = BW;
         invincibleTimer = SDL_GetTicks();
+    }
+
+    int Attacking() { 
+        if(attacking) return currentRow;
+        
+        return false;
+    }
+
+    void action(std::pair<int, int> coords) override {
+        if(attacking) {
+            
+            frameSpeed = 100;
+
+            if(currentFrame == 1) started = true;
+
+            if(currentFrame == 0 && started) {
+                
+                currentRow = currentDir;
+                started = false;
+                attacking = false;
+
+            }
+        }
+
+        Uint32 currentTime = SDL_GetTicks();
+        if(currentTime > invincibleTimer + invisLength) texture = Normal;
+
     }
 
     // Method to change the action (IDLE, WALKING, ECT)
@@ -29,6 +72,7 @@ public:
 
     void speedUp() { speed = 4.0f; frameSpeed = 100; }
     void normalSpeed() { speed = 2.0f; }
+
 
     // Methods for moving the sprite
     void move_x(int dir) { 
@@ -45,6 +89,7 @@ public:
         }
     }
 
+
     void move_y(int dir) { 
         float step = speed * dir;
         // I want some leeway in the hitbox so calculate that
@@ -59,6 +104,7 @@ public:
         }
     }
 
+
     void crouch() { 
         if(!crouched) {
             y = y + 20; // move down a bit so your head is lower
@@ -70,6 +116,7 @@ public:
         } 
     }
 
+
     void un_crouch() { 
         if(crouched) {
             y = y - 20;
@@ -80,9 +127,24 @@ public:
         }
     }
 
+
     bool iscrouched() { return crouched; }
 
-    void attack() {} 
+
+    void attack() {
+        attacking = true;
+
+        Start_Animation();
+        
+        switch(currentDir) {
+            case WALK_DOWN: currentRow = ATTACK_DOWN; break;
+            case WALK_RIGHT: currentRow = ATTACK_RIGHT; break;
+            case WALK_UP: currentRow = ATTACK_UP; break;
+            case WALK_LEFT: currentRow = ATTACK_LEFT; break;
+        }
+
+    } 
+
 
     void takeDamage(int amount) { 
         // invincibility frames with timer
@@ -90,14 +152,28 @@ public:
         if(currentTime > invincibleTimer + invisLength && amount) {
             Health -= amount;
             invincibleTimer = currentTime; 
-        }
+            texture = Damaged;
+        }  
     }
 
+
     bool displayHealth(GameWindow *game, int level, int room) {
+        
         enum Rooms {LEVEL_4 = 4, BossRoom = 2};
         static bool first = true; 
 
-        if(Health == 0) return true;
+        Uint32 currentTime = SDL_GetTicks();
+
+        if(Health == 0) {
+            static Uint32 stateTimer;
+
+            if(alive) {
+                stateTimer = SDL_GetTicks();
+                alive = false;
+            }
+
+            if(currentTime > stateTimer + 200) return true;
+        }
 
         for(int i = 0; i < Health; i += 20) {
 
@@ -113,7 +189,6 @@ public:
             }
 
         }
-        first++;
         return false;
     }
 

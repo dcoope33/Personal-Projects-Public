@@ -88,10 +88,12 @@ public:
     // these last two functions are generic and stay the same;
     int update() {
 
-        bool E_Pressed = game->handleEvents(*gameObjects);
+        int Button_Pressed = game->handleEvents(*gameObjects, player);
         int new_room = -1;
 
-        if(E_Pressed) new_room = updateRoom(player);
+        if(Button_Pressed == -99) return LEVEL_SELECT;
+
+        if(Button_Pressed) new_room = updateRoom(player);
         new_room = updateRoom_static(new_room);
         
         // update room entities and such if a new room is entered
@@ -125,13 +127,25 @@ public:
 
 
             int damage = 0;
-            // check collision against player but skip the player and background
-            if(e != player && e != (*gameObjects)[0]) damage = e->collCheck(player->getCoords(), player->iscrouched());
-            player->takeDamage(damage);
+            // check collision against player but skip the checking player on itself and background
+            if(showHealth && e != player && e != (*gameObjects)[0]) {
+                damage = e->collCheck(player->getCoords(), player->iscrouched());
+                
+                if(player->Attacking()) {
+                    if(e->takeDamage(false, player->getCoords(), player->Attacking())) {
+                        game->handleWIN(LevelCompleteTex);
+                        return LEVEL_SELECT;
+                    }
+                } else e->takeDamage(true, player->getCoords(), -1);
+            } 
+                
+            if(showHealth) player->takeDamage(damage);
 
             // render every entity
             e->render(game->getRenderer());
+
         }
+
 
         if(showHealth) {
             if(player->displayHealth(game, levelID, room)) {
@@ -191,7 +205,8 @@ public:
         Background *classroom = new Background(classroomTex, 800, 600, Tut);
 
         SDL_Texture *playerSheet = TextureManager::LoadTexture("Images/sprite_sheet.png", game->getRenderer());
-        player = new Player(playerSheet, NULL, 650, 300, 64, 64);
+        SDL_Texture *playerSheet_BW = TextureManager::LoadTexture("Images/sprite_sheet_BW.png", game->getRenderer());
+        player = new Player(playerSheet, NULL, playerSheet_BW, 650, 300, 64, 64);
         
         Classroom_Entities->push_back(classroom);
         Classroom_Entities->push_back(player);

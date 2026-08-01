@@ -9,13 +9,21 @@ int main(int argc, char* args[]) {
     SDL_Texture *GameCompleteTex = TextureManager::LoadTexture("Screens/GameComplete.png", game.getRenderer());
     SDL_Texture *StartTex = TextureManager::LoadTexture("Screens/StartingScreen.png", game.getRenderer());
     SDL_Texture *LevelSelectTex = TextureManager::LoadTexture("Screens/LevelSelect4.png", game.getRenderer());
+    SDL_Texture *LoadingTex = TextureManager::LoadTexture("Screens/Loading.png", game.getRenderer());
 
     // level number is gonna be chosen in the handlestart menu
     int level = game.handleStart(StartTex, LevelSelectTex);
 
     Level *CurrentLevel = nullptr;
     while(level && game.isRunning()) {
+        
+        game.loading(LoadingTex);
+        
         switch (level) {
+            case LEVEL_SELECT: 
+                level = game.handleStart(StartTex, LevelSelectTex);
+                break;
+
             case TUTORIAL:
                 CurrentLevel = new Tutorial(&game, LevelCompleteTex, LevelFailedTex);
                 // currentLevel->run returns the next level to be run

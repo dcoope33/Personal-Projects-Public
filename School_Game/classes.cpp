@@ -3,7 +3,7 @@
 enum MoveDir {UP = -1, DOWN = 1, LEFT = -1, RIGHT = 1};
 
 // Handles all SDL events
-bool GameWindow::handleEvents(std::vector<Entity*>& entities) {
+int GameWindow::handleEvents(std::vector<Entity*>& entities, Entity *p) {
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         if(event.type == SDL_QUIT) running = false; // close window
@@ -13,62 +13,70 @@ bool GameWindow::handleEvents(std::vector<Entity*>& entities) {
         } 
     }
 
-    Player *player = (Player*)entities[1]; // player is the second index
+    Player *player = (Player*)p; // player is the second index
     
     // get the keyboard state
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
     bool isMoving = false;
     bool new_room = false;
 
-    // Sneaking check (you can't move while sneaking)
-    if(currentKeyStates[SDL_SCANCODE_LSHIFT]) {
-        player->crouch();
+    if(!player->Attacking()) {
 
-    } else {
-        player->un_crouch();
+        // Sneaking check (you can't move while sneaking)
+        if(currentKeyStates[SDL_SCANCODE_LSHIFT]) {
+            player->crouch();
 
-        // check all the inputs and react accordingly
-        if(currentKeyStates[SDL_SCANCODE_LCTRL]){
-            player->speedUp();
-        } else  {
-            player->normalSpeed();
-        }
-        if(currentKeyStates[SDL_SCANCODE_W]) {
-            player->move_y(UP);
-            player->setState(WALK_UP);
-            isMoving = true;
-        }
-        if(currentKeyStates[SDL_SCANCODE_S]) {
-            player->move_y(DOWN);
-            player->setState(WALK_DOWN);
-            isMoving = true;
-        }
-        if(currentKeyStates[SDL_SCANCODE_A]) {
-            player->move_x(LEFT);
-            player->setState(WALK_LEFT);
-            isMoving = true;
-        }
-        if(currentKeyStates[SDL_SCANCODE_D]) {
-            player->move_x(RIGHT);
-            player->setState(WALK_RIGHT);
-            isMoving = true;
-        }
-        if(currentKeyStates[SDL_SCANCODE_E]) {
-            // timeout so that you don't go through a door and immediately go back
-            Uint32 currentTime = SDL_GetTicks();
-            if(currentTime > timer + 400) {
-                new_room = true;
-                isMoving = false;
+        } else {
+            player->un_crouch();
 
-                timer = currentTime;
+            // check all the inputs and react accordingly
+            if(currentKeyStates[SDL_SCANCODE_LCTRL]){
+                player->speedUp();
+            } else  {
+                player->normalSpeed();
+            }
+            if(currentKeyStates[SDL_SCANCODE_W]) {
+                player->move_y(UP);
+                player->setState(WALK_UP);
+                isMoving = true;
+            }
+            if(currentKeyStates[SDL_SCANCODE_S]) {
+                player->move_y(DOWN);
+                player->setState(WALK_DOWN);
+                isMoving = true;
+            }
+            if(currentKeyStates[SDL_SCANCODE_A]) {
+                player->move_x(LEFT);
+                player->setState(WALK_LEFT);
+                isMoving = true;
+            }
+            if(currentKeyStates[SDL_SCANCODE_D]) {
+                player->move_x(RIGHT);
+                player->setState(WALK_RIGHT);
+                isMoving = true;
+            }
+            if(currentKeyStates[SDL_SCANCODE_E]) {
+                // timeout so that you don't go through a door and immediately go back
+                Uint32 currentTime = SDL_GetTicks();
+                if(currentTime > timer + 400) {
+                    new_room = true;
+                    isMoving = false;
+
+                    timer = currentTime;
+                }
             }
         }
+
+        // I mean self explanitory
+        if(!isMoving) {
+            player->setState(IDLE);
+        }
+
+        if(currentKeyStates[SDL_SCANCODE_R]) player->attack();
+
+        if(currentKeyStates[SDL_SCANCODE_ESCAPE]) return -99;
+    
     }
 
-    // I mean self explanitory
-    if(!isMoving) {
-        player->setState(IDLE);
-    }
-    
     return new_room;
 }

@@ -35,7 +35,8 @@ public:
         Background *hallway = new Background(hallwayTex, 800, 600, Hallway3);
 
         SDL_Texture *playerSheet = TextureManager::LoadTexture("Images/sprite_sheet.png", game->getRenderer());
-        player = new Player(playerSheet, NULL, 650, 300, 64, 64);
+        SDL_Texture *playerSheet_BW = TextureManager::LoadTexture("Images/sprite_sheet_BW.png", game->getRenderer());
+        player = new Player(playerSheet, NULL, playerSheet_BW, 650, 300, 64, 64);
         
         Classroom_Entities->push_back(classroom);
         Hallway_Entities->push_back(hallway);
@@ -139,7 +140,8 @@ public:
         Background *hallway2 = new Background(hallway2Tex, 800, 600, Hallway3);
 
         SDL_Texture *playerSheet = TextureManager::LoadTexture("Images/sprite_sheet.png", game->getRenderer());
-        player = new Player(playerSheet, NULL, 650, 300, 64, 64);
+        SDL_Texture *playerSheet_BW = TextureManager::LoadTexture("Images/sprite_sheet_BW.png", game->getRenderer());
+        player = new Player(playerSheet, NULL, playerSheet_BW, 650, 300, 64, 64);
         
         Classroom_Entities->push_back(classroom);
         Hallway1_Entities->push_back(hallway1);
@@ -276,7 +278,8 @@ public:
         Background *hallway3 = new Background(hallway3Tex, 800, 600, Hallway3);
 
         SDL_Texture *playerSheet = TextureManager::LoadTexture("Images/sprite_sheet.png", game->getRenderer());
-        player = new Player(playerSheet, NULL, 650, 300, 64, 64);
+        SDL_Texture *playerSheet_BW = TextureManager::LoadTexture("Images/sprite_sheet_BW.png", game->getRenderer());
+        player = new Player(playerSheet, NULL, playerSheet_BW, 650, 300, 64, 64);
         
         Classroom_Entities->push_back(classroom);
         Hallway1_Entities->push_back(hallway1);
@@ -425,22 +428,25 @@ public:
 
 
         SDL_Texture *playerSheet = TextureManager::LoadTexture("Images/sprite_sheet.png", game->getRenderer());
-        player = new Player(playerSheet, TextureManager::LoadTexture("Images/HeathBar.png", game->getRenderer()), 650, 300, 64, 64);
+        SDL_Texture *playerSheet_BW = TextureManager::LoadTexture("Images/sprite_sheet_BW.png", game->getRenderer());
+        player = new Player(playerSheet, TextureManager::LoadTexture("Images/HeathBar.png", game->getRenderer()), playerSheet_BW, 650, 300, 64, 64);
         
         Classroom_Entities->push_back(classroom);
         Hallway_Entities->push_back(hallway);
         BossFight_Entities->push_back(bossfight);
         Classroom_Entities->push_back(player);
         Hallway_Entities->push_back(player);
-        BossFight_Entities->push_back(player);
 
         SDL_Texture *Sheet = TextureManager::LoadTexture("Images/Teacher.png", game->getRenderer());
         Teacher *T = new Teacher(Sheet, 550, 122, 64, 64);
         Classroom_Entities->push_back(T);
 
         SDL_Texture *PSheet = TextureManager::LoadTexture("Images/Principle.png", game->getRenderer());
-        Principle *P = new Principle(PSheet, 350, 400, 120, 120);
+        SDL_Texture *PSheet_DM = TextureManager::LoadTexture("Images/Principle_DM.png", game->getRenderer());
+        Principle *P = new Principle(PSheet, PSheet_DM, 350, 400, 120, 120);
         BossFight_Entities->push_back(P);
+
+        BossFight_Entities->push_back(player);
 
         Rooms.push_back(Classroom_Entities);
         Rooms.push_back(Hallway_Entities);

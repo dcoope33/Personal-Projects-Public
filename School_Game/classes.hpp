@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <time.h>
 
-enum Levels {END, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, TUTORIAL};
+enum Levels {END, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, TUTORIAL, LEVEL_SELECT};
 
 class Entity; // forward declaration
 
@@ -44,7 +44,13 @@ public:
 
     bool isRunning() { return running; }
 
-    bool handleEvents(std::vector<Entity*>& entities);
+    int handleEvents(std::vector<Entity*>& entities, Entity *player);
+
+    void loading(SDL_Texture *texture) {
+        clear();
+        SDL_RenderCopy(renderer, texture, 0, 0);
+        display();
+    }
 
     bool handleGameLoss(SDL_Texture *texture, int level_id) { 
         SDL_Event e;
@@ -62,6 +68,28 @@ public:
             }
         }
         return END;
+    }
+
+    void handleWIN(SDL_Texture *texture) {
+        SDL_Event e;
+        sleep(1);
+        while(isRunning()) {
+            clear();
+            SDL_RenderCopy(renderer, texture, 0, 0);
+            display();
+            while (SDL_PollEvent(&e)) {
+                if(e.type == SDL_QUIT) running = false; // close window
+                else if(e.type == SDL_MOUSEBUTTONDOWN) {
+                    bool inX_menu = e.button.x > 180 && e.button.x < 620;
+                    bool inY_menu = e.button.y > 210 && e.button.y < 310;
+                    if(inX_menu && inY_menu) return; //LEVEL_SELECT;
+                    
+                    bool inX_quit = e.button.x > 230 && e.button.x < 575;
+                    bool inY_quit = e.button.y > 410 && e.button.y < 465;
+                    if(inX_quit && inY_quit) exit(0);
+                } 
+            }
+        }
     }
 
     int handleGameWin(SDL_Texture *texture, int level_id) {

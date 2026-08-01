@@ -4,21 +4,31 @@
 #define SPRITE_W 33
 #define SPRITE_H 49
 
-enum AnimState {WALK_DOWN, WALK_RIGHT, WALK_UP, WALK_LEFT, CROUCHING, JUMPATTACK, IDLE, CHASING_X, CHASING_Y, SWOOPATTACK = 4};
+enum AnimState {WALK_DOWN, WALK_RIGHT, WALK_UP, WALK_LEFT, CROUCHING,
+    IDLE = 99, CHASING_X = 100, CHASING_Y= 101};
+
+enum Principle_AttackRows {SWOOPATTACK_R = 5, SWOOPATTACK_L = 6, JUMPATTACK = 4};
+
+enum Player_AttackRows {ATTACK_DOWN = 5, ATTACK_RIGHT = 6, ATTACK_UP = 7, ATTACK_LEFT = 8};
 
 class Entity {
 protected:
     float x, y;
+    
     int w, h;
     int currentFrame;
     int currentRow;
     int realRow;
     int frameSpeed = 400;
     int frameCount = 4;
+    int currentDir;
+    
+    Uint32 frameTimer = 0; // Tracks frame duration
+
     SDL_Texture *texture;
     SDL_Rect srcRect;
     SDL_Rect destRect;
-    Uint32 frameTimer = 0; // Tracks frame duration
+    
 
 public:
     Entity(SDL_Texture *tex, float x, float y, int w, int h) 
@@ -41,8 +51,10 @@ public:
         // Cycle through frames (X-Offset)
         // Assuming 4 frames per animation, SPRITE_W pixels wide each
         if(currentRow == IDLE) frameCount = 1;
+
+        if(currentRow < 4) currentDir = currentRow;
         
-        if(currentRow < 6) realRow = currentRow;
+        if(currentRow < 99) realRow = currentRow;
         
         if(currentTime > frameTimer + frameSpeed) {
             currentFrame = ++currentFrame % frameCount;
@@ -60,6 +72,11 @@ public:
         //destRect.w = w;
         frameSpeed = 400;
         frameCount = 4;
+    }
+
+    void Start_Animation() {
+        currentFrame = 0;
+        frameTimer = SDL_GetTicks();
     }
 
     void render(SDL_Renderer *renderer) {
@@ -95,6 +112,9 @@ public:
 
     virtual void resetState() { }
 
+    virtual bool takeDamage(bool reset, std::pair<int, int> coords, int AttackDir) { return false; }
+
+
 };
 
 
@@ -103,10 +123,11 @@ private:
     int initial_x, initial_y; // important for reseting 
     int walk_time = 4000;
     int idle_time = 3000;   
-    bool done_walking = false;
-    Uint32 stateTimer = 0; // Tracks state duration
     int prev_walking_dir = WALK_RIGHT;
+    Uint32 stateTimer = 0; // Tracks state duration
 
+    bool done_walking = false;
+    
 public:
     Teacher(SDL_Texture *tex, float x, float y, int w, int h) 
         : Entity(tex, x, y, w, h) {
