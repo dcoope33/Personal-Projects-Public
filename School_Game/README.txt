@@ -93,6 +93,11 @@ ENTITIES:
     such as distance from the player. 
 
 
+CONTROLS:
+
+    Move with WASD, sprint by holding CTRL, crouch by holding SHIFT, and attack with R.
+
+
 ADDITIONAL NOTES:
 
    This game depents on the SDL2 library and its image extention. In order for the game to work you must have SDL2 installed. 
