@@ -4,12 +4,15 @@ int main(int argc, char* args[]) {
 
     // Initialize gamewindow object and textures
     GameWindow game("Escape the Classroom", 800, 600);
+
+    SDL_Texture *LoadingTex = TextureManager::LoadTexture("Screens/Loading.png", game.getRenderer());
+    game.loading(LoadingTex);
+
     SDL_Texture *LevelCompleteTex = TextureManager::LoadTexture("Screens/LevelComplete.png", game.getRenderer());
     SDL_Texture *LevelFailedTex = TextureManager::LoadTexture("Screens/LevelFailed.png", game.getRenderer());
     SDL_Texture *GameCompleteTex = TextureManager::LoadTexture("Screens/GameComplete.png", game.getRenderer());
     SDL_Texture *StartTex = TextureManager::LoadTexture("Screens/StartingScreen.png", game.getRenderer());
     SDL_Texture *LevelSelectTex = TextureManager::LoadTexture("Screens/LevelSelect4.png", game.getRenderer());
-    SDL_Texture *LoadingTex = TextureManager::LoadTexture("Screens/Loading.png", game.getRenderer());
 
     // level number is gonna be chosen in the handlestart menu
     int level = game.handleStart(StartTex, LevelSelectTex);

@@ -16,7 +16,7 @@ private:
     int Hitbox_buff_left = 40;
     int Hitbox_buff_right = 60;
 
-    int Health = 400;
+    int Health = 300;
 
     bool started = false;
     bool jumpSet = false;
@@ -43,7 +43,7 @@ public:
 
 
     void move_x(int dir) { 
-        float step = 1.0f * dir; 
+        float step = .75f * dir; 
         int x_nextl = x + w/4 + step;
         int x_nextr = x + (3 * w/4) + step;
         int y_bottom = y + h-12;
@@ -58,7 +58,7 @@ public:
 
     
     void move_y(int dir) { 
-        float step = 1.0f * dir;
+        float step = .75f * dir;
         int x_l = x + w/4;
         int x_r = x + (3 * w/4);        
         int y_next = y + h-12 + step;
@@ -150,9 +150,9 @@ public:
         
         if(dist_x > 300 || dist_y > 300) return JUMP;
         
-        if(dist_x <= 100 && dist_y <= 100) return rand() % 3 + 1;
+        if(dist_x <= 120 && dist_y <= 50) return rand() % 3 + 1;
 
-        return NONE;
+        return (rand() % 4) ? NONE : JUMP;
     }
 
     void action(std::pair<int, int> coords) override {
@@ -172,7 +172,9 @@ public:
                     case DOWN: move_y(1); break;
                     case LEFT: move_x(-1); break;
                     case RIGHT: move_x(1); break;
-                    default: frameCount = 1;
+                    default: 
+                        frameCount = 1;
+                        time - 300;
                 }
 
                 // after time is up boss attacks
@@ -233,7 +235,7 @@ public:
         // Check if there is NO overlap. If any of these are true, they are NOT colliding.
         if (p_x + p_w <= x_left ||  // Player is entirely to the left of the obstacle
             p_x >= x_right ||  // Player is entirely to the right of the obstacle
-            p_y + p_h <= y ||  // Player is entirely above the obstacle
+            p_y + p_h <= y+15 ||  // Player is entirely above the obstacle
             p_y >= y + h)    // Player is entirely below the obstacle
         {
             return 0; 
@@ -244,7 +246,7 @@ public:
 
     bool takeDamage(bool reset, std::pair<int, int> coords, int AttackDir) override {
         // player is not attacking
-        if(reset) {
+        if(reset || (currentRow == JUMPATTACK && currentFrame == 3)) {
             hit = false;
             texture = Normal;
             return false;
