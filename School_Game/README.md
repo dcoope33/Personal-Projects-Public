@@ -1,6 +1,6 @@
 # PROJECT: ESCAPE THE CLASSROOM GAME
 
-## DISCLAIMER:
+## DISCLAIMER
 
    This game IS NOT FINISHED YET and I am in the process of working on level 4.
 
@@ -8,7 +8,7 @@
    I am an engineer not an artist.
 
 
-## OVERVIEW:   
+## OVERVIEW 
    
 Shool Game (Escape The Classroom) is a game that I have had a lot of fun developing. The basic idea of this game 
 is that it is a game where you are a student that doesn't like school I suppose, and due to your dislike of school 
@@ -22,7 +22,7 @@ garbage collection overhead. There are also many things that you can do with man
 make C and C++ soooo good. Anyways enough yapping. 
 
 
-## GAME ENGINE DESIGN:
+## GAME ENGINE DESIGN
 
 So for this game I spent a decent amount of time 
 planning and designing the "game engine" and making sure that I view everything as an object and follow the 4 pillars
@@ -73,7 +73,7 @@ of OOP. Here are some of the things I did to acheive this goal.
 levels or entities as needed without having to modify the game loop and rendering/animations. 
 
 
-ENTITIES:
+ENTITIES
     
 1.  I have a background entitiy that basically just lobotimizes the entity class
     by overloading the update so that it does nothing as there is no sprite sheet or animations for the static background. 
@@ -95,12 +95,12 @@ ENTITIES:
     such as distance from the player. 
 
 
-## CONTROLS:
+## CONTROLS
 
 Move with WASD, sprint by holding CTRL, crouch by holding SHIFT, and attack with R.
 
 
-## ADDITIONAL NOTES:
+## ADDITIONAL NOTES
 
 This game depents on the SDL2 library and its image extention. In order for the game to work you must have SDL2 installed. 
 sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev if on Ubuntu.
