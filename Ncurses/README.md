@@ -3,16 +3,16 @@
 <!-- TOC START -->
 <!-- TOC END -->
 
-## OVERVIEW:
+## OVERVIEW
 
 This is an arcade style space shooter game that is in my opintion quite fun. I also had
 a good time making it. It has different difficulty levels and unlockable ships. The game 
 itslelf is made using the Ncurses library meaning it is in the terminal. 
 
 
-## GAME DESIGN:
+## GAME DESIGN
 
-### ENTITIES:
+### ENTITIES
 
 I have two "entities", there is a player ship and there are enemy ships.
 
@@ -27,7 +27,7 @@ I have two "entities", there is a player ship and there are enemy ships.
 3. you could technically count the bullets as entities I guess. The bullet struct is just an x and y coord. 
 
 
-### GAME LOOP:
+### GAME LOOP
 
 The game loop does these things in this order.
 
@@ -44,7 +44,7 @@ The game loop does these things in this order.
 6.  Handles speedup, adding rows, and game over
 
 
-### UPDATE AND DRAW FUNCTION:
+### UPDATE AND DRAW FUNCTION
 
 This funcion is called once every time throught the game loop. and hadles the collision checking as well
 as the drawing to screen. I does the following things in order.
@@ -66,7 +66,7 @@ improve performace by not needing to loop through the same things twice. It's no
 because having a triple nested for loop makes the funcion a bit confusing and harder to read.
 
 
-### SAVE FILES: 
+### SAVE FILES
 
 There is one save file called Highscore. The first 4 bytes of the file store the highscore (an int). The next 8 bytes 
 store a struct (two ints) that correspondes to wether or not the two unlockable ships are unlocked. since the struct is 
@@ -75,13 +75,13 @@ cause some padding issues when trying to read in raw bytes from a file). There s
 as the struct should be consistantly 8 bytes with this configuration. 
 
 
-### MENUS: 
+### MENUS
 
 I have a couple of different menus that generally all have a dedicated funcion such as 
 Tutorial, Difficuly menu, ship select, ect.
 
 
-## ADDITIONAL NOTES:
+## DEPENDENCIES
 
 1.  The game requires you to have the Ncurses library installed.
 
