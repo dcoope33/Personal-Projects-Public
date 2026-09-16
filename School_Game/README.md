@@ -1,5 +1,8 @@
 # PROJECT: ESCAPE THE CLASSROOM GAME
 
+<!-- TOC START -->
+<!-- TOC END -->
+
 ## DISCLAIMER
 
    This game IS NOT FINISHED YET and I am in the process of working on level 4.
@@ -73,7 +76,7 @@ of OOP. Here are some of the things I did to acheive this goal.
 levels or entities as needed without having to modify the game loop and rendering/animations. 
 
 
-ENTITIES
+## ENTITIES
     
 1.  I have a background entitiy that basically just lobotimizes the entity class
     by overloading the update so that it does nothing as there is no sprite sheet or animations for the static background. 
