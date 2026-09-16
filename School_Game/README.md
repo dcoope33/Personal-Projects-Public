@@ -106,6 +106,10 @@ Move with WASD, sprint by holding CTRL, crouch by holding SHIFT, and attack with
 ## ADDITIONAL NOTES
 
 This game depents on the SDL2 library and its image extention. In order for the game to work you must have SDL2 installed. 
-sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev if on Ubuntu.
+```bash
+sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev
+```
+if on Ubuntu.
+
 
 [top](#)
