@@ -83,14 +83,13 @@ Tutorial, Difficuly menu, ship select, ect.
 
 ## DEPENDENCIES
 
-1.  The game requires you to have the Ncurses library installed.
+The game requires you to have the Ncurses library installed. Use the commands below if on Ubuntu
 
 ```bash
 sudo apt update && sudo apt install libncurses-dev libncursesw-dev
 ```
-if on Ubuntu.
 
-4.  If the Highscore file doesn't exist the game will seg fault upon launch so please make sure that if you take the code 
-    from this repo and try to run it that you also take the Highscore file aswell.
+If the Highscore file doesn't exist the game will seg fault upon launch so please make sure that if you take the code 
+from this repo and try to run it that you also take the Highscore file aswell.
 
 [top](#)
