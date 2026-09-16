@@ -1,7 +1,5 @@
 # PROJECT: ESCAPE THE CLASSROOM GAME
 
-[[_TOC_]]
-
 ## DISCLAIMER:
 
    This game IS NOT FINISHED YET and I am in the process of working on level 4.
